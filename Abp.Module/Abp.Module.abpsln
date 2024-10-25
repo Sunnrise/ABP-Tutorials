@@ -1,0 +1,7 @@
+{
+  "modules": {
+    "Abp.Module": {
+      "path": "Abp.Module.abpmdl"
+    }
+  }
+}
