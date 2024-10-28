@@ -68,7 +68,6 @@ public class SampleAppDbContext :
         builder.ConfigurePermissionManagement();
         builder.ConfigureSettingManagement();
         builder.ConfigureBackgroundJobs();
-        builder.ConfigureAuditLogging();
         builder.ConfigureIdentity();
         builder.ConfigureOpenIddict();
         builder.ConfigureFeatureManagement();

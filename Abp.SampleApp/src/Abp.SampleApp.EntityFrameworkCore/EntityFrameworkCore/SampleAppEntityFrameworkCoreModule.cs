@@ -4,6 +4,7 @@ using Volo.Abp.Uow;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.EntityFrameworkCore.SqlServer;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Identity.EntityFrameworkCore;
@@ -27,6 +28,7 @@ namespace Abp.SampleApp.EntityFrameworkCore;
     typeof(AbpTenantManagementEntityFrameworkCoreModule),
     typeof(AbpFeatureManagementEntityFrameworkCoreModule)
     )]
+[DependsOn(typeof(AbpEntityFrameworkCoreMySQLModule))]
 public class SampleAppEntityFrameworkCoreModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
@@ -43,11 +45,23 @@ public class SampleAppEntityFrameworkCoreModule : AbpModule
             options.AddDefaultRepositories(includeAllEntities: true);
         });
 
+        context.Services.AddAbpDbContext<SecondDbContext>();
+     
+
         Configure<AbpDbContextOptions>(options =>
         {
                 /* The main point to change your DBMS.
                  * See also SampleAppMigrationsDbContextFactory for EF Core tooling. */
             options.UseSqlServer();
+            options.Configure<AbpAuditLoggingDbContext>(opt =>
+            {
+                opt.UseMySQL();
+            });
+            
+            options.Configure<SecondDbContext>(opt =>
+            {
+                opt.UseMySQL();
+            });
         });
 
     }
